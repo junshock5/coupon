@@ -1,5 +1,4 @@
 # coupon
-
 목적
 ---
 - ### 쿠폰 시스템 개발
@@ -65,7 +64,7 @@ DB 데이터 확인 방법
 
 ERD
 ---
-
+![2020-11-21 03;25;04](https://user-images.githubusercontent.com/61732452/99836466-7c4fbd00-2ba9-11eb-8a40-e64d35e7521b.PNG)
 참고
 ---
 ### **Java8 표준 라이브러리 주소** <br/> https://docs.oracle.com/javase/8/docs/api/
