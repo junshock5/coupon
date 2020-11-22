@@ -4,6 +4,8 @@ import com.kakaopay.coupon.dto.CouponDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Optional;
+
 @Mapper
 public interface CouponMapper {
     public CouponDTO getCoupon(@Param("id") long id);

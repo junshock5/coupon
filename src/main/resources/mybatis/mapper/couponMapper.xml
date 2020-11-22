@@ -6,8 +6,8 @@
 <mapper namespace="com.kakaopay.coupon.mapper.CouponMapper">
 
     <insert id="register" parameterType="com.kakaopay.coupon.dto.CouponDTO">
-        INSERT INTO coupon ( id, name, discountType, discountValue, status, createdAt, updatedAt, endAt )
-        VALUES ( #{id}, #{name}, #{discountType}, #{discountValue}, #{status}, #{createdAt}, #{updatedAt}, #{endAt})
+        INSERT INTO coupon ( id, code, discountType, discountValue, status, createdAt, updatedAt, endAt )
+        VALUES ( #{id}, #{code}, #{discountType}, #{discountValue}, #{status}, #{createdAt}, #{updatedAt}, #{endAt})
     </insert>
 
     <select id="idCheck" resultType="int">
@@ -18,7 +18,7 @@
 
     <select id="getCoupon" resultType="com.kakaopay.coupon.dto.CouponDTO">
         SELECT id,
-        name,
+        code,
         status
         FROM coupon
         WHERE id = #{id}
@@ -31,7 +31,7 @@
 
     <update id="updateCoupon" parameterType="com.kakaopay.coupon.dto.CouponDTO">
         UPDATE coupon
-        SET name = #{name},
+        SET code = #{code},
         status = #{status}
         WHERE id= #{id}
     </update>

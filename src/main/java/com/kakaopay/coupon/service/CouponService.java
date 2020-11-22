@@ -4,7 +4,6 @@ import com.kakaopay.coupon.dto.CouponDTO;
 import com.kakaopay.coupon.exception.coupon.CouponDeleteException;
 import com.kakaopay.coupon.exception.coupon.CouponInsertException;
 import com.kakaopay.coupon.exception.coupon.CouponUpdateException;
-import com.kakaopay.coupon.exception.DuplicateIdException;
 import com.kakaopay.coupon.mapper.CouponMapper;
 import com.sun.istack.internal.NotNull;
 import lombok.extern.log4j.Log4j2;
@@ -23,10 +22,6 @@ public class CouponService {
     }
 
     public void register(CouponDTO CouponDTO) {
-        boolean duplIdResult = isDuplicatedId(CouponDTO.getId());
-        if (duplIdResult) {
-            throw new DuplicateIdException("중복된 아이디입니다.");
-        }
         int insertCount = couponMapper.register(CouponDTO);
 
         if (insertCount != 1) {
@@ -51,10 +46,6 @@ public class CouponService {
             log.error("deleteId ERROR! {}", id);
             throw new CouponDeleteException("deleteId ERROR! 쿠폰 삭제 메서드를 확인해주세요\n" + "Params : " + id);
         }
-    }
-
-    public boolean isDuplicatedId(long id) {
-        return couponMapper.idCheck(id) == 1;
     }
 
     public long totalCount() {
