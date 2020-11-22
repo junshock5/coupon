@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kakaopay.coupon.mapper.UserMapper">
+
+    <insert id="register" parameterType="com.kakaopay.coupon.dto.UserDTO">
+        INSERT INTO user ( id, password, createdAt )
+        VALUES ( #{id}, #{password}, #{createdAt})
+    </insert>
+
+    <select id="idCheck" resultType="int">
+        SELECT COUNT(id)
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="getUserProfile" resultType="com.kakaopay.coupon.dto.UserDTO">
+        SELECT id,
+        password,
+        createdAt
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <delete id="deleteUserProfile">
+        DELETE FROM user
+        WHERE id=#{id}
+    </delete>
+
+    <update id="updateUser" parameterType="com.kakaopay.coupon.dto.UserDTO">
+        UPDATE user
+        SET password = #{password}
+        WHERE id= #{id}
+    </update>
+
+</mapper>

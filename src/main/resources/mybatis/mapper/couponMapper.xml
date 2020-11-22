@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kakaopay.coupon.mapper.CouponMapper">
+
+    <insert id="register" parameterType="com.kakaopay.coupon.dto.CouponDTO">
+        INSERT INTO coupon ( id, name, discountType, discountValue, status, createdAt, updatedAt, endAt )
+        VALUES ( #{id}, #{name}, #{discountType}, #{discountValue}, #{status}, #{createdAt}, #{updatedAt}, #{endAt})
+    </insert>
+
+    <select id="idCheck" resultType="int">
+        SELECT COUNT(id)
+        FROM coupon
+        WHERE id = #{id}
+    </select>
+
+    <select id="getCoupon" resultType="com.kakaopay.coupon.dto.CouponDTO">
+        SELECT id,
+        name,
+        status
+        FROM coupon
+        WHERE id = #{id}
+    </select>
+
+    <delete id="deleteCoupon">
+        DELETE FROM coupon
+        WHERE id=#{id}
+    </delete>
+
+    <update id="updateCoupon" parameterType="com.kakaopay.coupon.dto.CouponDTO">
+        UPDATE coupon
+        SET name = #{name},
+        status = #{status}
+        WHERE id= #{id}
+    </update>
+
+    <select id="totalCount" resultType="long">
+        SELECT COUNT(id)
+        FROM coupon
+    </select>
+
+</mapper>
