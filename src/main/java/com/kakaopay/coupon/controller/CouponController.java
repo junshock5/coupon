@@ -154,6 +154,14 @@ public class CouponController {
         return responseEntity;
     }
 
+    /**
+     * 만료된 쿠폰 조회 메서드.
+     */
+    @GetMapping("/expired")
+    public UserCouponsResponse getExpiredCoupon() {
+        List<CouponDTO> couponDTOList = couponService.findExpiredToday();
+        return new UserCouponsResponse(couponDTOList);
+    }
 
     @Getter
     private static class CouponRequest {

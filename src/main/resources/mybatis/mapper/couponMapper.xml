@@ -90,4 +90,9 @@
         WHERE id = #{id}
     </update>
 
+    <select id="findExpiredToday" resultType="com.kakaopay.coupon.dto.UserDTO">
+        SELECT * FROM coupon
+        WHERE endAt <![CDATA[ <= ]]> <![CDATA[ CURRENT_DATE() ]]>
+    </select>
+
 </mapper>

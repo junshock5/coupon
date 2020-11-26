@@ -71,4 +71,8 @@ public class CouponService {
     public List<CouponDTO> getUserCoupons(long id) {
         return couponMapper.getUserCoupons(id);
     }
+
+    public List<CouponDTO> findExpiredToday() {
+        return couponMapper.findExpiredToday();
+    }
 }
