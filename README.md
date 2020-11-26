@@ -64,7 +64,7 @@ DB 데이터 확인 방법
 
 ERD
 ---
-![2020-11-21 03;25;04](https://user-images.githubusercontent.com/61732452/99836466-7c4fbd00-2ba9-11eb-8a40-e64d35e7521b.PNG)
+![2020-11-26 14;33;25](https://user-images.githubusercontent.com/61732452/100312008-7405e080-2ff4-11eb-9243-ea98c4ef79a8.PNG)
 
 참고
 ---
