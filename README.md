@@ -55,12 +55,24 @@ REST API 사양
  
 실행 방법
 ---
+- coupon.7z 압축 파일 해제
+- (윈도우 기준) 파일 경로 에서 실행 명령어 실행 (jre or jdk 필요)
+- mvn test package 시 target 파일에 InitialData.txt 복사 해야 정상 구동 됩니다.
+```
+cd leaderboard\
+java -jar coupon-0.0.1-SNAPSHOT.jar
+```
 
 API 확인 방법
 ---
+- url 접근시 swagger 를통해 API 확인
+- http://localhost:8080/swagger-ui.html#/ 
 
 DB 데이터 확인 방법
 ---
+- http://localhost:8080/h2-console/ 접속 후
+- setting 값을 Generic h2 (embedded) 설정
+- JDBC url 값을 jdbc:h2:~/coupon 접속 후 확인
 
 ERD
 ---
