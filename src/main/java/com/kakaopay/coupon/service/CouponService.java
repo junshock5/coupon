@@ -33,11 +33,14 @@ public class CouponService {
         }
     }
 
-    public void updateCoupon(CouponDTO CouponDTO) {
+    public void updateCoupon(CouponDTO couponDTO) {
         try {
-            couponMapper.updateCoupon(CouponDTO);
+            couponDTO.setUpdatedAt(LocalDateTime.now());
+            couponDTO.setStatus(CouponDTO.Status.DEFAULT);
+            couponDTO.setUserId(null);
+            couponMapper.updateCoupon(couponDTO);
         } catch (CouponUpdateException e) {
-            throw new CouponUpdateException("updateCoupon ERROR! 쿠폰 변경 메서드를 확인해주세요\n" + "Params : " + CouponDTO);
+            throw new CouponUpdateException("updateCoupon ERROR! 쿠폰 변경 메서드를 확인해주세요\n" + "Params : " + couponDTO);
         }
     }
 
@@ -56,6 +59,12 @@ public class CouponService {
     public void updateIsEnabledCouponById(CouponDTO couponDTO, long userId) throws CouponNotFoundException {
         couponDTO.setUserId(userId);
         couponDTO.setAssignedAt(LocalDateTime.now());
+        couponMapper.setAvailable(couponDTO);
+    }
+
+    public void updateCouponUsedById(CouponDTO couponDTO, long userId) throws CouponNotFoundException {
+        couponDTO.setUpdatedAt(LocalDateTime.now());
+        couponDTO.setStatus(CouponDTO.Status.USED);
         couponMapper.setIsUsed(couponDTO);
     }
 
