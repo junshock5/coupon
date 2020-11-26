@@ -18,6 +18,7 @@ public class CouponDTO {
     }
 
     private Long id;
+    private Long userId;
     private String code;
     private DiscountType discountType;
     private Long discountValue;
@@ -25,24 +26,26 @@ public class CouponDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime endAt;
+    private LocalDateTime assignedAt;
 
     @Builder
-    public CouponDTO(Long id, String code, DiscountType discountType, Long discountValue, LocalDateTime updatedAt, LocalDateTime endAt, Status status) {
+    public CouponDTO(Long id, Long userId, String code, DiscountType discountType, Long discountValue, Status status, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime endAt, LocalDateTime assignedAt) {
         this.id = id;
+        this.userId = userId;
         this.code = code;
         this.discountType = discountType;
         this.discountValue = discountValue;
-        this.createdAt = LocalDateTime.now();
+        this.status = status;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.endAt = endAt;
-        this.status = status;
+        this.assignedAt = assignedAt;
     }
 
     public static boolean hasNullData(CouponDTO couponDTO) {
         return couponDTO.getCode() == null
                 || couponDTO.getDiscountType() == null
                 || couponDTO.getDiscountValue() == null
-                || couponDTO.getStatus() == null
                 || couponDTO.getEndAt() == null;
     }
 }

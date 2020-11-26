@@ -5,9 +5,13 @@
 
 <mapper namespace="com.kakaopay.coupon.mapper.CouponMapper">
 
-    <insert id="register" parameterType="com.kakaopay.coupon.dto.CouponDTO">
-        INSERT INTO coupon ( id, code, discountType, discountValue, status, createdAt, updatedAt, endAt )
-        VALUES ( #{id}, #{code}, #{discountType}, #{discountValue}, #{status}, #{createdAt}, #{updatedAt}, #{endAt})
+    <insert id="batchInsert" parameterType="java.util.Map">
+        INSERT INTO coupon ( id, userId, code, discountType, discountValue, status, createdAt, updatedAt, endAt )
+        VALUES
+        <foreach item="CouponDTO" index="index" collection="list" open="" separator=",">
+            (#{CouponDTO.id}, #{CouponDTO.userId}, #{CouponDTO.code}, #{CouponDTO.discountType}, #{CouponDTO.discountValue},
+            #{CouponDTO.status}, #{CouponDTO.createdAt}, #{CouponDTO.updatedAt}, #{CouponDTO.endAt})
+        </foreach>
     </insert>
 
     <select id="idCheck" resultType="int">
@@ -18,6 +22,7 @@
 
     <select id="getCoupon" resultType="com.kakaopay.coupon.dto.CouponDTO">
         SELECT id,
+        userId,
         code,
         status
         FROM coupon
@@ -32,13 +37,9 @@
     <update id="updateCoupon" parameterType="com.kakaopay.coupon.dto.CouponDTO">
         UPDATE coupon
         SET code = #{code},
-        status = #{status}
+        discountValue = #{discountValue},
+        assignedAt = #{assignedAt}
         WHERE id= #{id}
     </update>
-
-    <select id="totalCount" resultType="long">
-        SELECT COUNT(id)
-        FROM coupon
-    </select>
 
 </mapper>

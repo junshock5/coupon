@@ -4,20 +4,18 @@ import com.kakaopay.coupon.dto.CouponDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Optional;
+import java.util.Map;
+
 
 @Mapper
 public interface CouponMapper {
-    public CouponDTO getCoupon(@Param("id") long id);
+    CouponDTO getCoupon(@Param("id") long id);
 
     int deleteCoupon(@Param("id") long id);
 
-    public int register(CouponDTO couponDTO);
+    int batchInsert(Map<String, Object> map);
 
     int idCheck(long id);
 
-    public int updateCoupon(CouponDTO couponDTO);
-
-    long totalCount();
-
+    int updateCoupon(CouponDTO couponDTO);
 }

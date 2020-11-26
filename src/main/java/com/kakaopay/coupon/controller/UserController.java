@@ -10,6 +10,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(tags = {"users"})
 @RestController
 @RequestMapping("/users")
@@ -34,9 +36,8 @@ public class UserController {
     /**
      * 회원 수정 메서드.
      */
-    @PatchMapping("{userId}")
+    @PatchMapping("/{userId}")
     public HttpStatus updateAddress(@RequestBody UserUpdateRequest userUpdateRequest) {
-        long Id = 0;
         UserDTO userDTO = userUpdateRequest.getUserDTO();
 
         try {
@@ -51,14 +52,27 @@ public class UserController {
     /**
      * 회원 ID 삭제 메서드.
      */
-    @DeleteMapping("{userId}")
+    @DeleteMapping("/{userId}")
     public HttpStatus deleteId(@RequestBody long id) {
         try {
             userService.deleteId(id);
         } catch (RuntimeException e) {
-            log.info("deleteID 실패", e);
+            log.error("deleteID 실패", e);
         }
         return HttpStatus.OK;
+    }
+
+    /**
+     * 전체 유저 반환
+     */
+    @GetMapping("totalUsers")
+    public List<UserDTO> getUsers() {
+        try {
+            return userService.totalUsers();
+        } catch (RuntimeException e) {
+            log.error("totalUsers 실패", e);
+        }
+        return null;
     }
 
     @Getter

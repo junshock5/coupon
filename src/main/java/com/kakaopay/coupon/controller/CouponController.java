@@ -13,6 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @Api(tags = {"coupons"})
 @RestController
@@ -30,19 +35,7 @@ public class CouponController {
     }
 
     /**
-     * 쿠폰 한개 추가 메서드.
-     */
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody CouponDTO couponDTO) {
-        if (CouponDTO.hasNullData(couponDTO)) {
-            throw new NullPointerException("쿠폰 추가시 필수 데이터를 모두 입력 해야 합니다.");
-        }
-        couponService.register(couponDTO);
-    }
-
-    /**
-     * 쿠폰 다수 추가 메서드.
+     * 쿠폰 추가 메서드.
      */
     @PostMapping("/{coupon_count}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -53,6 +46,8 @@ public class CouponController {
         if (CouponDTO.hasNullData(couponDTO)) {
             throw new NullPointerException("쿠폰 추가시 필수 데이터를 모두 입력 해야 합니다.");
         }
+
+        List<CouponDTO> list = new ArrayList();
         for (int i = 0; i < num; ++i) {
             CouponDTO couponTemp = CouponDTO.builder()
                     .code(CouponUtils.getUUIDCouponCode())
@@ -61,19 +56,22 @@ public class CouponController {
                     .status(CouponDTO.Status.DEFAULT)
                     .endAt(couponDTO.getEndAt())
                     .build();
-
-            couponService.register(couponTemp);
+            list.add(couponTemp);
         }
+
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("list", list);
+        couponService.batchInsert(paramMap);
+
     }
 
 
     /**
      * 쿠폰 수정 메서드.
      */
-    @PatchMapping("{userId}")
+    @PatchMapping("/{id}")
     public HttpStatus updateCoupon(@RequestBody CouponRequest couponRequest) {
         CouponDTO CouponDTO = couponRequest.getCouponDTO();
-
         try {
             couponService.updateCoupon(CouponDTO);
         } catch (NullPointerException e) {
@@ -86,33 +84,21 @@ public class CouponController {
     /**
      * 쿠폰 ID 삭제 메서드.
      */
-    @DeleteMapping("{userId}")
+    @DeleteMapping("/{id}")
     public HttpStatus deleteId(@RequestBody long id) {
         try {
             couponService.deleteId(id);
         } catch (RuntimeException e) {
             log.info("deleteID 실패", e);
+            return HttpStatus.BAD_REQUEST;
         }
         return HttpStatus.OK;
-    }
-
-    /**
-     * 쿠폰 전체 수 반환 메서드.
-     */
-    @GetMapping("totalCount")
-    public long totalCount() {
-        try {
-            return couponService.totalCount();
-        } catch (RuntimeException e) {
-            log.info("totalCount 실패", e);
-        }
-        return 0;
     }
 
     @Getter
     private static class CouponRequest {
         @NonNull
-        private CouponDTO CouponDTO;
+        private CouponDTO couponDTO;
     }
 
 }

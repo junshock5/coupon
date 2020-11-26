@@ -6,8 +6,8 @@
 <mapper namespace="com.kakaopay.coupon.mapper.UserMapper">
 
     <insert id="register" parameterType="com.kakaopay.coupon.dto.UserDTO">
-        INSERT INTO user ( id, password, createdAt )
-        VALUES ( #{id}, #{password}, #{createdAt})
+        INSERT INTO user ( id, userId, password, createdAt )
+        VALUES ( #{id}, #{userId}, #{password}, #{createdAt})
     </insert>
 
     <select id="idCheck" resultType="int">
@@ -18,6 +18,7 @@
 
     <select id="getUserProfile" resultType="com.kakaopay.coupon.dto.UserDTO">
         SELECT id,
+        userId,
         password,
         createdAt
         FROM user
@@ -31,8 +32,16 @@
 
     <update id="updateUser" parameterType="com.kakaopay.coupon.dto.UserDTO">
         UPDATE user
-        SET password = #{password}
+        SET password = #{password},
+        userId = #{userId}
         WHERE id= #{id}
     </update>
+
+    <select id="totalUsers" resultType="com.kakaopay.coupon.dto.UserDTO">
+        SELECT id,
+        userId,
+        createdAt
+        FROM user
+    </select>
 
 </mapper>
