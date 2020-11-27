@@ -6,10 +6,8 @@ import com.kakaopay.coupon.exception.coupon.CouponInsertException;
 import com.kakaopay.coupon.exception.coupon.CouponNotFoundException;
 import com.kakaopay.coupon.exception.coupon.CouponUseException;
 import com.kakaopay.coupon.mapper.CouponMapper;
-import com.kakaopay.coupon.utils.CouponUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
