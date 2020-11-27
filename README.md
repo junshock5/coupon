@@ -49,7 +49,7 @@ REST API 사양
 - (윈도우 기준) 파일 경로 에서 실행 명령어 실행 (jre or jdk 필요)
 - mvn test package 시 target 파일에 InitialData.txt 복사 해야 정상 구동 됩니다.
 ```
-cd leaderboard
+cd coupon
 java -jar coupon-0.0.1-SNAPSHOT.jar
 ```
 
