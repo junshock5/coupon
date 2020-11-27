@@ -87,7 +87,8 @@
         UPDATE coupon
         SET status = #{status},
         updatedAt = #{updatedAt}
-        WHERE id = #{id}
+        WHERE id = #{id} AND
+        endAt <![CDATA[ > ]]> <![CDATA[ CURRENT_DATE() ]]>
     </update>
 
     <select id="findExpiredToday" resultType="com.kakaopay.coupon.dto.UserDTO">

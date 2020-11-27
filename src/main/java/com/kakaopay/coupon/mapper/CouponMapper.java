@@ -26,7 +26,7 @@ public interface CouponMapper {
 
     List<CouponDTO> getUserCoupons(long id);
 
-    void setIsUsed(CouponDTO couponDTO);
+    boolean setIsUsed(CouponDTO couponDTO);
 
     List<CouponDTO> findExpiredToday();
 }
