@@ -43,17 +43,19 @@ public class CouponController {
     /**
      * 쿠폰 추가 메서드.
      */
-    @PostMapping("/{coupon_count}")
+    @PostMapping("/{num}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerCoupons(long num, @RequestBody CouponDTO couponDTO) {
+    public ResponseEntity<CouponResponse> registerCoupons(long num, @RequestBody CouponDTO couponDTO) {
+        ResponseEntity<CouponResponse> responseEntity = SUCCESS_RESPONSE;
         if (num > 100000) {
-            throw new InvalidPayloadException("The number of coupon should be less than 1000000.");
+            responseEntity = FAIL_RESPONSE;
         }
         if (CouponDTO.hasNullData(couponDTO)) {
             throw new NullPointerException("쿠폰 추가시 필수 데이터를 모두 입력 해야 합니다.");
         }
 
         List<CouponDTO> list = new ArrayList();
+
         for (int i = 0; i < num; ++i) {
             CouponDTO couponTemp = CouponDTO.builder()
                     .id(couponDTO.getId())
@@ -70,7 +72,7 @@ public class CouponController {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("list", list);
         couponService.batchInsert(paramMap);
-
+        return responseEntity;
     }
 
 
@@ -162,7 +164,7 @@ public class CouponController {
     }
 
     @Getter
-    private static class CouponRequest {
+    public static class CouponRequest {
         @NonNull
         private CouponDTO couponDTO;
     }
@@ -176,7 +178,7 @@ public class CouponController {
     @Getter
     @AllArgsConstructor
     @RequiredArgsConstructor
-    private static class CouponResponse {
+    static class CouponResponse {
         enum CouponStatus {
             SUCCESS, FAIL, DELETED
         }
@@ -196,7 +198,7 @@ public class CouponController {
 
     @Getter
     @AllArgsConstructor
-    private static class UserCouponsResponse {
+    public static class UserCouponsResponse {
         private List<CouponDTO> couponDTOList;
     }
 }
