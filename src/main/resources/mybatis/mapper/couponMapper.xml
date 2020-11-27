@@ -42,4 +42,43 @@
         WHERE id= #{id}
     </update>
 
+    <select id="findByCode" resultType="com.kakaopay.coupon.dto.CouponDTO">
+        SELECT id,
+        userId,
+        code,
+        discountType,
+        discountValue,
+        status,
+        createdAt,
+        updatedAt,
+        endAt,
+        assignedAt
+        FROM coupon
+        WHERE code = #{code}
+    </select>
+
+    <select id="setIsUsed" resultType="com.kakaopay.coupon.dto.CouponDTO">
+        <if test="status.toString() != 'USED'">
+            UPDATE coupon
+            SET userId = #{userId},
+            assignedAt = #{assignedAt}
+            WHERE id = #{id}
+        </if>
+    </select>
+
+    <select id="getUserCoupons" resultType="com.kakaopay.coupon.dto.CouponDTO">
+        SELECT id,
+        userId,
+        code,
+        discountType,
+        discountValue,
+        status,
+        createdAt,
+        updatedAt,
+        endAt,
+        assignedAt
+        FROM coupon
+        WHERE userId = #{id}
+    </select>
+
 </mapper>
