@@ -6,10 +6,10 @@
 <mapper namespace="com.kakaopay.coupon.mapper.CouponMapper">
 
     <insert id="batchInsert" parameterType="java.util.Map">
-        INSERT INTO coupon ( id, userId, code, discountType, discountValue, status, createdAt, updatedAt, endAt )
+        INSERT INTO coupon ( userId, code, discountType, discountValue, status, createdAt, updatedAt, endAt )
         VALUES
-        <foreach item="CouponDTO" index="index" collection="list" open="" separator=",">
-            (#{CouponDTO.id}, #{CouponDTO.userId}, #{CouponDTO.code}, #{CouponDTO.discountType},
+        <foreach item="CouponDTO" index="index" collection="list" separator=",">
+            (#{CouponDTO.userId}, #{CouponDTO.code}, #{CouponDTO.discountType},
             #{CouponDTO.discountValue}, #{CouponDTO.status}, #{CouponDTO.createdAt}, #{CouponDTO.updatedAt}, #{CouponDTO.endAt})
         </foreach>
     </insert>

@@ -78,7 +78,7 @@ public class CouponController {
      * 쿠폰 취소 메서드.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<CouponResponse> updateCouponDefaultById(@RequestBody CouponRequest couponRequest) {
+    public ResponseEntity<CouponResponse> cancelCouponById(@RequestBody CouponRequest couponRequest) {
         ResponseEntity<CouponResponse> responseEntity = SUCCESS_RESPONSE;
         CouponDTO CouponDTO = couponRequest.getCouponDTO();
         try {
@@ -109,7 +109,7 @@ public class CouponController {
      * 쿠폰 사용자 지급 메서드.
      */
     @PatchMapping("/{coupon_code}")
-    public ResponseEntity<CouponResponse> updateWhetherUsingCoupon(@RequestBody CouponUseRequest couponUseRequest) throws CouponMemberNotMatchException {
+    public ResponseEntity<CouponResponse> giveNotUsingCoupon(@RequestBody CouponUseRequest couponUseRequest) throws CouponMemberNotMatchException {
         ResponseEntity<CouponResponse> responseEntity = SUCCESS_RESPONSE;
         CouponUtils.validateCouponCode(couponUseRequest.getCouponCode());
 
