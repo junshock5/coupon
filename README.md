@@ -22,6 +22,7 @@
 - Junit을 사용하여 테스트 코드 작성
 - batch Insert 기능을 이용한 대용량 데이터 처리
 - 대용량 트래픽 환경을 고려하여 WAS의 Scale-out 구조로 개발
+- 20만개 쿠폰 벌크 csv Import 기능 개발
 
 REST API 사양
 ---
