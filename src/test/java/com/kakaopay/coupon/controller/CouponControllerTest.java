@@ -35,6 +35,9 @@ class CouponControllerTest {
     @InjectMocks
     private CouponService couponService;
 
+    @Mock
+    private CouponMapper couponMapper;
+
     @InjectMocks
     private CouponController couponController;
 
