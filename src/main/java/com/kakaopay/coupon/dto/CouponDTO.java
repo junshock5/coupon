@@ -16,7 +16,7 @@ public class CouponDTO {
     }
 
     public enum Status {
-        DEFAULT, DELETED, USED
+        DEFAULT, DELETED, USED, EXPIRED
     }
 
     private Long id;

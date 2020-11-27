@@ -2,7 +2,7 @@ package com.kakaopay.coupon.controller;
 
 import com.kakaopay.coupon.dto.CouponDTO;
 import com.kakaopay.coupon.exception.coupon.CouponMemberNotMatchException;
-import com.kakaopay.coupon.exception.coupon.CouponUpdateException;
+import com.kakaopay.coupon.exception.coupon.CouponUseException;
 import com.kakaopay.coupon.exception.coupon.InvalidPayloadException;
 import com.kakaopay.coupon.exception.user.UserNotFoundException;
 import com.kakaopay.coupon.service.CouponService;
@@ -137,20 +137,18 @@ public class CouponController {
      * 지급된 쿠폰 사용 메서드.
      */
     @PutMapping("/{coupon_code}")
-    public ResponseEntity<CouponResponse> useUserCoupons(@RequestBody CouponUseRequest couponUseRequest) throws CouponUpdateException {
+    public ResponseEntity<CouponResponse> useUserCoupons(@RequestBody CouponUseRequest couponUseRequest) throws CouponUseException {
         ResponseEntity<CouponResponse> responseEntity = SUCCESS_RESPONSE;
         CouponUtils.validateCouponCode(couponUseRequest.getCouponCode());
 
         CouponDTO coupon = couponService.findByCode(couponUseRequest.getCouponCode());
         if (coupon != null) {
-            if (coupon.getUserId().equals(couponUseRequest.getUserId()) && coupon.getStatus() != CouponDTO.Status.USED)
-                couponService.updateCouponUsedById(coupon, couponUseRequest.getUserId());
-            else
-                throw new CouponUpdateException(couponUseRequest.getCouponCode());
-        } else {
-            responseEntity = FAIL_RESPONSE;
+            if (coupon.getUserId().equals(couponUseRequest.getUserId()) && coupon.getStatus() != CouponDTO.Status.USED) {
+                if (!couponService.updateCouponUsedById(coupon))
+                    throw new CouponUseException(couponUseRequest.getCouponCode());
+            } else
+                responseEntity = FAIL_RESPONSE;
         }
-
         return responseEntity;
     }
 

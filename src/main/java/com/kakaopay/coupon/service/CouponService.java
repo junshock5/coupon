@@ -4,10 +4,12 @@ import com.kakaopay.coupon.dto.CouponDTO;
 import com.kakaopay.coupon.exception.coupon.CouponDeleteException;
 import com.kakaopay.coupon.exception.coupon.CouponInsertException;
 import com.kakaopay.coupon.exception.coupon.CouponNotFoundException;
-import com.kakaopay.coupon.exception.coupon.CouponUpdateException;
+import com.kakaopay.coupon.exception.coupon.CouponUseException;
 import com.kakaopay.coupon.mapper.CouponMapper;
+import com.kakaopay.coupon.utils.CouponUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,7 +30,7 @@ public class CouponService {
     public void batchInsert(Map<String, Object> map) {
         try {
             couponMapper.batchInsert(map);
-        } catch (CouponUpdateException e) {
+        } catch (CouponUseException e) {
             throw new CouponInsertException("insertCoupon ERROR! 쿠폰 추가 메서드를 확인해주세요\n" + "Params : " + map);
         }
     }
@@ -39,8 +41,8 @@ public class CouponService {
             couponDTO.setStatus(CouponDTO.Status.DEFAULT);
             couponDTO.setUserId(null);
             couponMapper.updateCoupon(couponDTO);
-        } catch (CouponUpdateException e) {
-            throw new CouponUpdateException("updateCoupon ERROR! 쿠폰 변경 메서드를 확인해주세요\n" + "Params : " + couponDTO);
+        } catch (CouponUseException e) {
+            throw new CouponUseException("updateCoupon ERROR! 쿠폰 변경 메서드를 확인해주세요\n" + "Params : " + couponDTO);
         }
     }
 
@@ -62,10 +64,10 @@ public class CouponService {
         couponMapper.setAvailable(couponDTO);
     }
 
-    public void updateCouponUsedById(CouponDTO couponDTO, long userId) throws CouponNotFoundException {
+    public boolean updateCouponUsedById(CouponDTO couponDTO) throws CouponNotFoundException {
         couponDTO.setUpdatedAt(LocalDateTime.now());
         couponDTO.setStatus(CouponDTO.Status.USED);
-        couponMapper.setIsUsed(couponDTO);
+        return couponMapper.setIsUsed(couponDTO);
     }
 
     public List<CouponDTO> getUserCoupons(long id) {
@@ -75,4 +77,19 @@ public class CouponService {
     public List<CouponDTO> findExpiredToday() {
         return couponMapper.findExpiredToday();
     }
+
+//    // 매일 오후 1시에 발급된 쿠폰중 만료 3일전 사용자 에게 메세지, scale-out 관점에서 비효율적이어서 따로 스케줄러 서버가 두는게 낫다 판단.
+//    @Scheduled(cron = "0 0 13 * * ?")
+//    public void alarmBefore3DaysAgoAt1PM(){
+//        List<CouponDTO> couponDTOList = findExpiredToday();
+//
+//        for (CouponDTO couponDTO : couponDTOList) {
+//            CouponDTO couponTemp = CouponDTO.builder()
+//                    .id(couponDTO.getId())
+//                    .status(CouponDTO.Status.EXPIRED)
+//                    .updatedAt(LocalDateTime.now())
+//                    .build();
+//            //couponMapper.setIsUsed(couponTemp);
+//        }
+//    }
 }

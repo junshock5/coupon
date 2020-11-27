@@ -6,11 +6,11 @@
 <mapper namespace="com.kakaopay.coupon.mapper.CouponMapper">
 
     <insert id="batchInsert" parameterType="java.util.Map">
-        INSERT INTO coupon ( userId, code, discountType, discountValue, status, createdAt, updatedAt, endAt )
+        INSERT INTO coupon ( userId, code, discountType, discountValue, status, createdAt, updatedAt, endAt, assignedAt )
         VALUES
         <foreach item="CouponDTO" index="index" collection="list" separator=",">
             (#{CouponDTO.userId}, #{CouponDTO.code}, #{CouponDTO.discountType},
-            #{CouponDTO.discountValue}, #{CouponDTO.status}, #{CouponDTO.createdAt}, #{CouponDTO.updatedAt}, #{CouponDTO.endAt})
+            #{CouponDTO.discountValue}, #{CouponDTO.status}, #{CouponDTO.createdAt}, #{CouponDTO.updatedAt}, #{CouponDTO.endAt}, #{CouponDTO.assignedAt})
         </foreach>
     </insert>
 
@@ -87,7 +87,8 @@
         UPDATE coupon
         SET status = #{status},
         updatedAt = #{updatedAt}
-        WHERE id = #{id}
+        WHERE id = #{id} AND
+        endAt <![CDATA[ > ]]> <![CDATA[ CURRENT_DATE() ]]>
     </update>
 
     <select id="findExpiredToday" resultType="com.kakaopay.coupon.dto.UserDTO">
