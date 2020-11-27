@@ -6,11 +6,11 @@
 <mapper namespace="com.kakaopay.coupon.mapper.CouponMapper">
 
     <insert id="batchInsert" parameterType="java.util.Map">
-        INSERT INTO coupon ( id, userId, code, discountType, discountValue, status, createdAt, updatedAt, endAt )
+        INSERT INTO coupon ( userId, code, discountType, discountValue, status, createdAt, updatedAt, endAt, assignedAt )
         VALUES
-        <foreach item="CouponDTO" index="index" collection="list" open="" separator=",">
-            (#{CouponDTO.id}, #{CouponDTO.userId}, #{CouponDTO.code}, #{CouponDTO.discountType}, #{CouponDTO.discountValue},
-            #{CouponDTO.status}, #{CouponDTO.createdAt}, #{CouponDTO.updatedAt}, #{CouponDTO.endAt})
+        <foreach item="CouponDTO" index="index" collection="list" separator=",">
+            (#{CouponDTO.userId}, #{CouponDTO.code}, #{CouponDTO.discountType},
+            #{CouponDTO.discountValue}, #{CouponDTO.status}, #{CouponDTO.createdAt}, #{CouponDTO.updatedAt}, #{CouponDTO.endAt}, #{CouponDTO.assignedAt})
         </foreach>
     </insert>
 
@@ -35,11 +35,65 @@
     </delete>
 
     <update id="updateCoupon" parameterType="com.kakaopay.coupon.dto.CouponDTO">
-        UPDATE coupon
-        SET code = #{code},
-        discountValue = #{discountValue},
-        assignedAt = #{assignedAt}
-        WHERE id= #{id}
+        <if test="status.toString() != 'USED'">
+            UPDATE coupon
+            SET status = #{status},
+            userId = #{userId},
+            updatedAt = #{updatedAt}
+            WHERE id = #{id}
+        </if>
     </update>
+
+    <select id="findByCode" resultType="com.kakaopay.coupon.dto.CouponDTO">
+        SELECT id,
+        userId,
+        code,
+        discountType,
+        discountValue,
+        status,
+        createdAt,
+        updatedAt,
+        endAt,
+        assignedAt
+        FROM coupon
+        WHERE code = #{code}
+    </select>
+
+    <select id="setAvailable" resultType="com.kakaopay.coupon.dto.CouponDTO">
+        <if test="status.toString() != 'USED'">
+            UPDATE coupon
+            SET userId = #{userId},
+            assignedAt = #{assignedAt}
+            WHERE id = #{id}
+        </if>
+    </select>
+
+    <select id="getUserCoupons" resultType="com.kakaopay.coupon.dto.CouponDTO">
+        SELECT id,
+        userId,
+        code,
+        discountType,
+        discountValue,
+        status,
+        createdAt,
+        updatedAt,
+        endAt,
+        assignedAt
+        FROM coupon
+        WHERE userId = #{id}
+    </select>
+
+    <update id="setIsUsed" parameterType="com.kakaopay.coupon.dto.CouponDTO">
+        UPDATE coupon
+        SET status = #{status},
+        updatedAt = #{updatedAt}
+        WHERE id = #{id} AND
+        endAt <![CDATA[ > ]]> <![CDATA[ CURRENT_DATE() ]]>
+    </update>
+
+    <select id="findExpiredToday" resultType="com.kakaopay.coupon.dto.UserDTO">
+        SELECT * FROM coupon
+        WHERE endAt <![CDATA[ <= ]]> <![CDATA[ CURRENT_DATE() ]]>
+    </select>
 
 </mapper>

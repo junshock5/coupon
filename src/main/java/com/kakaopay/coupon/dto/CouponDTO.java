@@ -2,11 +2,13 @@ package com.kakaopay.coupon.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @ToString
 public class CouponDTO {
     public enum DiscountType {
@@ -14,7 +16,7 @@ public class CouponDTO {
     }
 
     public enum Status {
-        DEFAULT, DELETED
+        DEFAULT, DELETED, USED, EXPIRED
     }
 
     private Long id;
