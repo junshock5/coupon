@@ -22,7 +22,11 @@ public interface CouponMapper {
 
     CouponDTO findByCode(String code);
 
-    void setIsUsed(CouponDTO couponDTO);
+    void setAvailable(CouponDTO couponDTO);
 
     List<CouponDTO> getUserCoupons(long id);
+
+    void setIsUsed(CouponDTO couponDTO);
+
+    List<CouponDTO> findExpiredToday();
 }

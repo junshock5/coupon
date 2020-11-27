@@ -6,8 +6,8 @@
 <mapper namespace="com.kakaopay.coupon.mapper.UserMapper">
 
     <insert id="register" parameterType="com.kakaopay.coupon.dto.UserDTO">
-        INSERT INTO user ( id, userId, password, createdAt )
-        VALUES ( #{id}, #{userId}, #{password}, #{createdAt})
+        INSERT INTO user ( userId, password, createdAt )
+        VALUES ( #{userId}, #{password}, #{createdAt})
     </insert>
 
     <select id="idCheck" resultType="int">

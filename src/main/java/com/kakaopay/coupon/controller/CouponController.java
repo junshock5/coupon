@@ -2,7 +2,7 @@ package com.kakaopay.coupon.controller;
 
 import com.kakaopay.coupon.dto.CouponDTO;
 import com.kakaopay.coupon.exception.coupon.CouponMemberNotMatchException;
-import com.kakaopay.coupon.exception.coupon.CouponNotFoundException;
+import com.kakaopay.coupon.exception.coupon.CouponUpdateException;
 import com.kakaopay.coupon.exception.coupon.InvalidPayloadException;
 import com.kakaopay.coupon.exception.user.UserNotFoundException;
 import com.kakaopay.coupon.service.CouponService;
@@ -75,10 +75,10 @@ public class CouponController {
 
 
     /**
-     * 쿠폰 수정 메서드.
+     * 쿠폰 취소 메서드.
      */
-    @PatchMapping("/{id}")
-    public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest couponRequest) {
+    @PutMapping("/{id}")
+    public ResponseEntity<CouponResponse> cancelCouponById(@RequestBody CouponRequest couponRequest) {
         ResponseEntity<CouponResponse> responseEntity = SUCCESS_RESPONSE;
         CouponDTO CouponDTO = couponRequest.getCouponDTO();
         try {
@@ -108,8 +108,8 @@ public class CouponController {
     /**
      * 쿠폰 사용자 지급 메서드.
      */
-    @PutMapping("/{coupon_code}")
-    public ResponseEntity<CouponResponse> updateWhetherUsingCoupon(@RequestBody CouponUseRequest couponUseRequest) throws CouponMemberNotMatchException {
+    @PatchMapping("/{coupon_code}")
+    public ResponseEntity<CouponResponse> giveNotUsingCoupon(@RequestBody CouponUseRequest couponUseRequest) throws CouponMemberNotMatchException {
         ResponseEntity<CouponResponse> responseEntity = SUCCESS_RESPONSE;
         CouponUtils.validateCouponCode(couponUseRequest.getCouponCode());
 
@@ -127,9 +127,39 @@ public class CouponController {
     /**
      * 지급된 쿠폰 조회 메서드.
      */
-    @GetMapping("/userId")
+    @GetMapping("/{userId}")
     public UserCouponsResponse getUserCoupons(long userId) throws UserNotFoundException {
         List<CouponDTO> couponDTOList = couponService.getUserCoupons(userId);
+        return new UserCouponsResponse(couponDTOList);
+    }
+
+    /**
+     * 지급된 쿠폰 사용 메서드.
+     */
+    @PutMapping("/{coupon_code}")
+    public ResponseEntity<CouponResponse> useUserCoupons(@RequestBody CouponUseRequest couponUseRequest) throws CouponUpdateException {
+        ResponseEntity<CouponResponse> responseEntity = SUCCESS_RESPONSE;
+        CouponUtils.validateCouponCode(couponUseRequest.getCouponCode());
+
+        CouponDTO coupon = couponService.findByCode(couponUseRequest.getCouponCode());
+        if (coupon != null) {
+            if (coupon.getUserId().equals(couponUseRequest.getUserId()) && coupon.getStatus() != CouponDTO.Status.USED)
+                couponService.updateCouponUsedById(coupon, couponUseRequest.getUserId());
+            else
+                throw new CouponUpdateException(couponUseRequest.getCouponCode());
+        } else {
+            responseEntity = FAIL_RESPONSE;
+        }
+
+        return responseEntity;
+    }
+
+    /**
+     * 만료된 쿠폰 조회 메서드.
+     */
+    @GetMapping("/expired")
+    public UserCouponsResponse getExpiredCoupon() {
+        List<CouponDTO> couponDTOList = couponService.findExpiredToday();
         return new UserCouponsResponse(couponDTOList);
     }
 
