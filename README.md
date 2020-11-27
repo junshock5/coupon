@@ -77,7 +77,3 @@ DB 데이터 확인 방법
 ERD
 ---
 ![2020-11-26 14;33;25](https://user-images.githubusercontent.com/61732452/100312008-7405e080-2ff4-11eb-9243-ea98c4ef79a8.PNG)
-
-참고
----
-### **Java8 표준 라이브러리 주소** <br/> https://docs.oracle.com/javase/8/docs/api/
