@@ -9,7 +9,6 @@
 - Maven Project
 - Java 8
 - Junit
-- assertj
 - Swagger
 - h2 database
 - mybatis
